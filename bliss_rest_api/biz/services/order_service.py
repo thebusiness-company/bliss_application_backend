@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate
 from django.conf import settings
 from django.utils.crypto import get_random_string
 from .file_service import *
+from .customer_service import *
 from ..models import *
 import uuid
 from ..services.collection_query_service import exec_raw_sql
@@ -51,9 +52,12 @@ def order_updation(user_id,username,**data):
     except Exception as e:
         raise APIException(e)
 
-def order_list_byuser(user_id,username,**data):
+def order_list_byuser(user_id,username):
     try:
-        order_data= Order.objects.filter(customer = user_id).values()
+        print(user_id)
+        customer_id = get_customer_id(user_id)
+        order_data= Order.objects.filter(customer_id = customer_id).values()
+        print(order_data)
         return order_data
     except Exception as e:
         raise APIException(e)

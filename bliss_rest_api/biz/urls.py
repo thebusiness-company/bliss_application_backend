@@ -19,6 +19,7 @@ urlpatterns = [
     path('add_admin',AddAdmin.as_view()),
     path('get_user_role',Get_User_Role.as_view()),
     path('contact_api',Contact_Submission.as_view()),
+    path('signinwith_google',SignInWith_Google.as_view()),
     #product api
     path('add_product',AddProduct.as_view()), 
     path('list_product',ListProduct.as_view()), 

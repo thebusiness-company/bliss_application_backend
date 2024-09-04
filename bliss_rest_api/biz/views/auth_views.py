@@ -6,7 +6,10 @@ from rest_framework import status
 from ..services.user_service import *
 from ..models import *
 from rest_framework.decorators import authentication_classes, permission_classes
-
+from django.http import JsonResponse
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from django.conf import settings
 from django.utils import timezone
   
 import datetime
@@ -141,6 +144,25 @@ class Contact_Submission(APIView):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         messaging = contact_us(**serializer.validated_data)
-        return Response({'data' : messaging},status=status.HTTP_200_OK)   
+        return Response({'data' : messaging},status=status.HTTP_200_OK)  
+
+@authentication_classes([])
+@permission_classes([])
+class SignInWith_Google(APIView):
+    class InputSerializer(serializers.Serializer):
+        # name = serializers.CharField()
+        # email = serializers.CharField()
+        id_token_from_client = serializers.CharField()
+        
+    def post(self, request):
+        # serializer = self.InputSerializer(data=request.data)
+        # serializer.is_valid(raise_exception=True)
+        # customer = signin_via_google(**serializer.validated_data)
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        customer = signin_via_google(**serializer.validated_data)
+        return Response({'data' : customer},status=status.HTTP_200_OK)
+
+
 
 

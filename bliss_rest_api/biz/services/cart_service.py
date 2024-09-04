@@ -89,7 +89,7 @@ def remove_all_cart_items_for_customer(user_id):
         print(customer_id)
         print(2)
         Cart.objects.filter(customer_id = customer_id).delete()
-        return "Done"
+        return "Success"
     except Exception as e:
         raise APIException(e)  
     

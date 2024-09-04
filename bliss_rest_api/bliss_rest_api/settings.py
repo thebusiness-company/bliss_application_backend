@@ -96,7 +96,7 @@ DATABASES = {
     }
 }
 
-
+GOOGLE_CLIENT_ID = '407984448539-dmtf3l80ikef44lbu10f3470n90rk4fp.apps.googleusercontent.com'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

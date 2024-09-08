@@ -54,26 +54,23 @@ def order_updation(user_id,username,**data):
 
 def order_list_byuser(user_id,username):
     try:
-        print(user_id)
         customer_id = get_customer_id(user_id)
-        order_data= Order.objects.filter(customer_id = customer_id).values()
-        print(order_data)
+        order_data = exec_raw_sql('GET_USER_ORDER',{'user_id' : customer_id})
+        # order_data= Order.objects.filter(customer_id = customer_id).values()
         return order_data
     except Exception as e:
         raise APIException(e)
 
 def list_all_orders():
     try:
-        order_data= Order.objects.all().values()
+        order_data = exec_raw_sql('GET_ALL_ORDER')
         return order_data
     except Exception as e:
         raise APIException(e)        
 
 def get_order_details(user_id):
     try:
-        print(user_id)
         data = exec_raw_sql('I_GET_ORDER_DETAILS',{'id' : user_id})
-        print(data)
         return data
     except Exception as e:
         raise APIException(e)        

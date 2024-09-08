@@ -15,11 +15,11 @@ from ..services.collection_query_service import exec_raw_sql
 
 def add_to_cart(user_id,username,**data):
     try:
-        customer_id = get_customer_id(user_id)
-        add_to_cart = Cart.objects.create(product_id = data.get('product_id'),product_qty = data.get('product_qty'),
+            customer_id = get_customer_id(user_id)
+            add_to_cart = Cart.objects.create(product_id = data.get('product_id'),product_qty = data.get('product_qty'),
                          customer_id = customer_id,created_by = username)
-        add_to_cart.save()
-        return "Success"
+            add_to_cart.save()
+            return "Success"
     except Exception as e:
         raise APIException(e)
     
@@ -50,11 +50,7 @@ def get_cart_items(user_id,**data):
 def update_cart_items(user_id,**data):
     try:
         customer_id = get_customer_id(user_id)
-        print(customer_id)
-        print(data)
         update_cart = Cart.objects.filter(customer_id = customer_id, id= data.get("cart_id")).first()
-        print(update_cart) 
-        print(2)
         update_cart.product_qty = data.get('product_qty')
         update_cart.save()
         return update_cart.customer_id
@@ -84,12 +80,9 @@ def delete_cart_items(user_id,cart_id):
 
 def remove_all_cart_items_for_customer(user_id):
     try:
-        print(1)
         customer_id = get_customer_id(user_id)
-        print(customer_id)
-        print(2)
         Cart.objects.filter(customer_id = customer_id).delete()
-        return "Success"
+        return "Done"
     except Exception as e:
         raise APIException(e)  
     

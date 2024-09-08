@@ -23,7 +23,6 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, username, email, password):
-        #print(password)
         if password is None:
             raise TypeError('Superusers must have a password.')
 
@@ -98,7 +97,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         for user in users:
                 users_list.append(user.username)
 
-        #print(users_list)
 
         return users_list
     

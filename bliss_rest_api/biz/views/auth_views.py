@@ -6,10 +6,6 @@ from rest_framework import status
 from ..services.user_service import *
 from ..models import *
 from rest_framework.decorators import authentication_classes, permission_classes
-from django.http import JsonResponse
-from google.oauth2 import id_token
-from google.auth.transport import requests
-from django.conf import settings
 from django.utils import timezone
   
 import datetime
@@ -25,7 +21,6 @@ class CreateToken(APIView):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         access, refresh  = create_token(**serializer.validated_data)
-        # print(request.user.id)
         return Response({'access': access, 'refresh': refresh },status=status.HTTP_200_OK)
 
 @authentication_classes([])
@@ -46,7 +41,6 @@ class AddCustomer(APIView):
 class GetUserId(APIView):
 
     def get(self, request):
-        print(request.user.id)
         customer = get_user_id(request.user.id)
 
         return Response({'data' : customer},status=status.HTTP_200_OK)
@@ -54,9 +48,7 @@ class GetUserId(APIView):
 # @authentication_classes([])
 # @permission_classes([])       
 class GetCustomer(APIView):
-
     def get(self, request):
-        print(request.user.id)
         customer = get_customer(request.user.id)
         return Response({'data' : customer},status=status.HTTP_200_OK)    
 
@@ -127,7 +119,6 @@ class AddAdmin(APIView):
 
 class Get_User_Role(APIView): 
     def get(self, request):
-        print(request.user.id)
         customer = get_user_role(request.user.id)
         return Response({'data' : customer},status=status.HTTP_200_OK)     
 
@@ -144,25 +135,20 @@ class Contact_Submission(APIView):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         messaging = contact_us(**serializer.validated_data)
-        return Response({'data' : messaging},status=status.HTTP_200_OK)  
+        return Response({'data' : messaging},status=status.HTTP_200_OK)   
 
 @authentication_classes([])
 @permission_classes([])
 class SignInWith_Google(APIView):
     class InputSerializer(serializers.Serializer):
-        # name = serializers.CharField()
-        # email = serializers.CharField()
-        id_token_from_client = serializers.CharField()
+        name = serializers.CharField()
+        email = serializers.CharField()
+        sub = serializers.CharField()
+        
         
     def post(self, request):
-        # serializer = self.InputSerializer(data=request.data)
-        # serializer.is_valid(raise_exception=True)
-        # customer = signin_via_google(**serializer.validated_data)
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        customer = signin_via_google(**serializer.validated_data)
-        return Response({'data' : customer},status=status.HTTP_200_OK)
-
-
-
-
+        access, refresh  = signin_via_google(**serializer.validated_data)
+        # customer = signin_via_google(**serializer.validated_data)
+        return Response({'access': access, 'refresh': refresh },status=status.HTTP_200_OK)   

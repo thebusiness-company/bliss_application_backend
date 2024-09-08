@@ -10,7 +10,6 @@ class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.CharField(max_length=50)  #check it
-
     class Meta:
         db_table = 'bliss_cart_details'  
        

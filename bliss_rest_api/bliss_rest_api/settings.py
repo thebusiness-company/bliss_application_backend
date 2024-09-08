@@ -96,7 +96,21 @@ DATABASES = {
     }
 }
 
-GOOGLE_CLIENT_ID = '407984448539-dmtf3l80ikef44lbu10f3470n90rk4fp.apps.googleusercontent.com'
+# GOOGLE_CLIENT_ID = '407984448539-dmtf3l80ikef44lbu10f3470n90rk4fp.apps.googleusercontent.com'
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'ecom_bliss',
+# 		'USER': 'postgres',
+#         'PASSWORD': 'Veronica@9934',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

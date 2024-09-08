@@ -19,7 +19,6 @@ logger = logging.getLogger('django')
 def upload_file(username, **data):
     try:
         fl = data.get('file')
-        print(data)
         # logger.info("Adm|services|file_service|upload_file: file data " + fl.name)
 
         tmp_file_name = get_random_string(length=12) + '_' + fl.name

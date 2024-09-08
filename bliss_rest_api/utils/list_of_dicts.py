@@ -12,7 +12,6 @@ def list_of_dicts(list):
     dist = {}
     lists = []
     colume1 = list.columns
-    print(colume1)
     for i in range(len(list)):
         for j in range(len(colume1)):
             dist[colume1[j]] = list[i].id

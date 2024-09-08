@@ -8,10 +8,6 @@ from django.conf import settings
 from ..models import *
 import uuid
 from ..services.collection_query_service import exec_raw_sql
-from django.http import JsonResponse
-from google.oauth2 import id_token
-from google.auth.transport import requests
-from django.conf import settings
 from django.utils import timezone
 
 # main function 
@@ -22,8 +18,6 @@ def create_token(**data):
 
     refresh_tkn = RefreshToken.for_user(user)
     access_tkn = refresh_tkn.access_token
-    
-
     return str(access_tkn), str(refresh_tkn) 
 
 def create_customer(**data):
@@ -34,8 +28,7 @@ def create_customer(**data):
         user.is_active=True
         # user.validate_token = User.objects.make_random_password(10) + uuid.uuid4().hex[:6].upper()
         user_id = user.id
-        role = role.object.filter(name="customer").first()
-        
+        role = Role.objects.filter(name = 'customer').first()
         user.roles.add(role.id) #here 1 is role_id of customer refer role table
         user.save()
 
@@ -49,38 +42,31 @@ def create_customer(**data):
 
 def signin_via_google(**data):
     try:
-      
-        print(1)
-        print(data)    
-        idinfo = id_token.verify_oauth2_token(data.get('id_token_from_client'), requests.Request(), settings.GOOGLE_CLIENT_ID)
-            # Extract user information
-        print(idinfo)
-        email = idinfo['email']
-        name = idinfo.get('name')
-            
-            # Check if user exists or create a new user
-        # user, created = User.objects.create_user(email,email)        
-        # user.is_active=True
-        # # user.validate_token = User.objects.make_random_password(10) + uuid.uuid4().hex[:6].upper()
-        # user_id = user.id
-        # user.roles.add(1) #here 1 is role_id of customer refer role table
-        # user.save()
-        # auth_login(request, user)
-        # CustomerDetails.objects.create(customer_name = data.get('name'),email = data.get('email'),
-        #                                user_id = user.id)
+        # User = get_user_model()
+        email = data.get('email')
+        name = data.get('name')
+        user_exist = User.objects.filter(email = email).first()
+        if user_exist :
+            # user = User.objects.get(email=email) 
+            refresh_tkn = RefreshToken.for_user(user_exist)
+            access_tkn = refresh_tkn.access_token
 
-
-
-                # Generate and return a session token or JWT if needed
-                # Example: token = generate_jwt(user)  # Implement this function as needed
-        return user.id    
-        
-    # except ValueError as e:
-    #         # Invalid token
-    #     return JsonResponse({'status': 'error', 'message': 'Invalid token'}, status=400)
+        else :
+            user = User.objects.create_user( email,email)
+            user.is_active=True
+            # user.validate_token = User.objects.make_random_password(10) + uuid.uuid4().hex[:6].upper()
+            user_id = user.id
+            role = Role.objects.filter(name = 'customer').first()
+            user.roles.add(role.id) #here 1 is role_id of customer refer role table
+            user.save()
+            # auth_login(request, user)
+            CustomerDetails.objects.create(customer_name = name,email = email,
+                                        user_id = user.id)
+            refresh_tkn = RefreshToken.for_user(user)
+            access_tkn = refresh_tkn.access_token    
+        return str(access_tkn), str(refresh_tkn)    
     except Exception as e:
         raise APIException(e)
-
 
 def create_admin(**data):
     try:
@@ -90,8 +76,8 @@ def create_admin(**data):
         admin.is_active=True
         # admin.validate_token = User.objects.make_random_password(10) + uuid.uuid4().hex[:6].upper()
         admin_id = admin.id
-        role = role.object.filter
-        admin.roles.add(2) #here 2 is role_id of admin refer role table 
+        role = Role.objects.filter(name = 'admin').first()
+        admin.roles.add(role.id) #here 2 is role_id of admin refer role table
         admin.save()
         return admin.id
     except Exception as e:
@@ -116,7 +102,6 @@ def get_user_id(user_id):
 def get_user_role(user_id):
     try:
         data = exec_raw_sql('GET_USER_ROLE', {"user_id" : user_id}) 
-        print(data)
         return data
     except Exception as e:
         raise APIException(e) 
@@ -173,5 +158,5 @@ def contact_us(**data):
         return contact.name
     except Exception as e:
         raise APIException(e)                    
+   
 
-       

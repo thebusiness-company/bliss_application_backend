@@ -85,29 +85,29 @@ WSGI_APPLICATION = 'bliss_rest_api.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 # localdevelopment
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'bliss_application',
-		'USER': 'postgres',
-        'PASSWORD': 'TheBusinessCompany@123',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-
-# GOOGLE_CLIENT_ID = '407984448539-dmtf3l80ikef44lbu10f3470n90rk4fp.apps.googleusercontent.com'
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'ecom_bliss',
+#         'NAME': 'bliss_application',
 # 		'USER': 'postgres',
-#         'PASSWORD': 'Veronica@9934',
+#         'PASSWORD': 'TheBusinessCompany@123',
 #         'HOST': 'localhost',
 #         'PORT': '5432',
 #     }
 # }
+
+# GOOGLE_CLIENT_ID = '407984448539-dmtf3l80ikef44lbu10f3470n90rk4fp.apps.googleusercontent.com'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ecom_bliss',
+		'USER': 'postgres',
+        'PASSWORD': 'Veronica@9934',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 
 
 

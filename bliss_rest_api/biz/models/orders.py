@@ -7,6 +7,7 @@ from .product import Product
 class Order(models.Model):
     customer = models.ForeignKey(CustomerDetails, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    customer_name = models.CharField(max_length =10,null=True)
     quantity = models.CharField(max_length =10,null=False)
     email = models.EmailField(max_length=150, null=False)
     phone = models.CharField(max_length=20, null=False)

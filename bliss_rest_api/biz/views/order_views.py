@@ -12,6 +12,7 @@ import datetime
 
 class AddOrder(APIView):
     class InputSerializer(serializers.Serializer):
+        customer_name= serializers.CharField()
         product_id = serializers.IntegerField()
         quantity = serializers.IntegerField()
         email = serializers.CharField()
@@ -58,23 +59,16 @@ class UpdateOrder(APIView):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         product = order_updation(request.user.id,request.user.username,**serializer.validated_data)
-
         return Response({'data' : product },status=status.HTTP_200_OK)   
 
 class GetOrderData(APIView):
+    class InputSerializer(serializers.Serializer):
+        order_id = serializers.IntegerField()
     def post(self,request):
-        data = get_order_details(request.user.id)
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = get_order_details(request.user.id,**serializer.validated_data)
         return Response({'data' : data },status=status.HTTP_200_OK)                
-    
-# class GetOrderData(APIView):
-#     class InputSerializer(serializers.Serializer):
-#         order_id = serializers.IntegerField()
-
-#     def post(self, request):
-#         serializer = self.InputSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         product = get_order_data(request.user.id,request.user.username,**serializer.validated_data)
-#         return Response({'data' : product },status=status.HTTP_200_OK) 
 
 class ListOrdersByUser(APIView):    
     def get(self, request):

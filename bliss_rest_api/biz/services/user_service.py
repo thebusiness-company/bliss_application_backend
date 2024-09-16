@@ -122,12 +122,19 @@ def list_customer():
 
 def update_customer(user_id,**data):
     try:
+        user= User.objects.filter(id=user_id).first()
+        user.username=data.get('email')
+        user.email=data.get('email')
+        user.save()
         Customer = CustomerDetails.objects.filter(user_id = user_id).first()
+        Customer.customer_name = data.get('name')
+        Customer.email = data.get('email')
         Customer.address = data.get('address')
         Customer.city = data.get('city')
         Customer.state = data.get('state')
         Customer.country = data.get('country')
         Customer.pincode = data.get('pincode')
+        Customer.mobile_number = data.get('mobile')
         Customer.save()
         return "Succesfully updated"
     except Exception as e:

@@ -61,6 +61,9 @@ class ListCustomer(APIView):
 
 class UpdateCustomer(APIView):
     class InputSerializer(serializers.Serializer):
+        name = serializers.CharField()
+        email = serializers.CharField()
+        mobile = serializers.IntegerField()
         address = serializers.CharField()
         city = serializers.CharField()
         state = serializers.CharField()

@@ -17,7 +17,7 @@ import random
 def order_creation(user_id,username,**data):
     try:
         get_customer_id = CustomerDetails.objects.filter(user_id = user_id).first()
-        order_creation = Order(product_id = data.get('product_id'),quantity = data.get('quantity'),
+        order_creation = Order(customer_name=data.get('customer_name') ,product_id = data.get('product_id'),quantity = data.get('quantity'),
                            email = data.get('email'),phone = data.get('phone'),address = data.get('address'),
                            city = data.get('city'),state = data.get('state'),
                            country = data.get('country'),pincode = data.get('pincode'),total_price = data.get('total_price'),
@@ -30,7 +30,8 @@ def order_creation(user_id,username,**data):
     
 def order_cancellation(user_id,username,**data):
     try:
-        order_data= Order.objects.filter(customer = user_id,id=data.get('order_id')).first()
+        customer_id = get_customer_id(user_id)
+        order_data= Order.objects.filter(customer = customer_id,id=data.get('order_id')).first()
         order_data.delete()
         return order_data
     except Exception as e:
@@ -38,7 +39,8 @@ def order_cancellation(user_id,username,**data):
 
 def order_updation(user_id,username,**data):
     try:
-        order_data= Order.objects.filter(customer = user_id,id=data.get('order_id')).first()
+        customer_id = get_customer_id(user_id)
+        order_data= Order.objects.filter(customer = customer_id,id=data.get('order_id')).first()
         order_data.email = data.get('email'),
         order_data.phone = data.get('phone'),
         order_data.address = data.get('address'),
@@ -68,9 +70,18 @@ def list_all_orders():
     except Exception as e:
         raise APIException(e)        
 
-def get_order_details(user_id):
+# def get_order_details(user_id):
+#     try:
+#         data = exec_raw_sql('I_GET_ORDER_DETAILS',{'id' : user_id})
+#         return data
+#     except Exception as e:
+#         raise APIException(e)      
+
+def get_order_details(user_id,**data):
     try:
-        data = exec_raw_sql('I_GET_ORDER_DETAILS',{'id' : user_id})
-        return data
+        customer_id = get_customer_id(user_id)
+        order_id = data.get('order_id')
+        order_data = Order.objects.filter(customer_id = customer_id,id=order_id).values().first() 
+        return order_data
     except Exception as e:
-        raise APIException(e)        
+        raise APIException(e)  

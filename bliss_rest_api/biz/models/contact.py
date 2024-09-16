@@ -1,7 +1,7 @@
 from django.db import models
 
 class ContactSubmission(models.Model): 
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50,null=False)
     email = models.EmailField(db_index=True,max_length=150,null=True)
     mobile_number = models.CharField(db_index=True,max_length=10,null=True)
     message=models.CharField(max_length=250)

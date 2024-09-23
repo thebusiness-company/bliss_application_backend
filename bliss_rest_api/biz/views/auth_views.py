@@ -146,12 +146,37 @@ class SignInWith_Google(APIView):
     class InputSerializer(serializers.Serializer):
         name = serializers.CharField()
         email = serializers.CharField()
-        sub = serializers.CharField()
-        
-        
+        sub = serializers.CharField() 
     def post(self, request):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         access, refresh  = signin_via_google(**serializer.validated_data)
         # customer = signin_via_google(**serializer.validated_data)
         return Response({'access': access, 'refresh': refresh },status=status.HTTP_200_OK)   
+        
+@authentication_classes([])
+@permission_classes([])
+class Reset_Password(APIView):
+    class InputSerializer(serializers.Serializer):
+        email = serializers.CharField()
+        path = serializers.CharField()
+    def post(self, request):
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        reset_response = reset_user_password(**serializer.validated_data)
+        print(reset_response)
+        return Response({'data' : reset_response},status=status.HTTP_200_OK) 
+
+@authentication_classes([])
+@permission_classes([])
+class Change_Password(APIView):
+    class InputSerializer(serializers.Serializer):
+        userId = serializers.CharField()
+        password = serializers.CharField()
+    def post(self, request):
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        reset_response = change_user_password(**serializer.validated_data)
+        return Response({'data' : reset_response},status=status.HTTP_200_OK)      
+
+

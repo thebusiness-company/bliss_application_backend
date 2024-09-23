@@ -109,7 +109,14 @@ DATABASES = {
     }
 }
 
-
+#Email Setup
+#smtp settings
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_HOST_USER ='veronica.j@thebusinesscompany.in'
+EMAIL_HOST_PASSWORD ='zghr nwuz rghd gwso'
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 
 # Password validation

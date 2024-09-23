@@ -9,7 +9,8 @@ from ..models import *
 import uuid
 from ..services.collection_query_service import exec_raw_sql
 from django.utils import timezone
-
+from bliss_rest_api import settings
+from django.core.mail import EmailMessage
 # main function 
 def create_token(**data):
     user = authenticate(username=data.get('username'), password=data.get('password'))
@@ -46,7 +47,7 @@ def signin_via_google(**data):
         email = data.get('email')
         name = data.get('name')
         user_exist = User.objects.filter(email = email).first()
-        if user_exist :
+        if user_exist is not None:
             # user = User.objects.get(email=email) 
             refresh_tkn = RefreshToken.for_user(user_exist)
             access_tkn = refresh_tkn.access_token
@@ -166,4 +167,44 @@ def contact_us(**data):
     except Exception as e:
         raise APIException(e)                    
    
+def reset_user_password(**data):
+    try:
+        email = data.get('email')
+        path = data.get('path')
+        user_exist = User.objects.filter(email = email,is_active = True).first()
+        if user_exist is not None:
+            mail_subject = "User password reset request"
+            to_email = user_exist.email
+            from_email = settings.EMAIL_HOST_USER
+            link_message = path + '/change-password/' + str(user_exist.id)
+            html_message = f'<p>Hello customer,</p> <p>You have requested to reset you password for the bliss application.</p> <p>Please ignore the e-mail, if it is not done by you.</p> <p>Your password reset link is {link_message}</p><p>This is a system genereated e-mail. Do not reply to this e-mail</p>'
 
+            # send_mail(
+            #     subject=mail_subject,
+            #     message = html_message,
+            #     from_email= settings.EMAIL_HOST_USER,
+            #     recipient_list=[to_email],
+            #     fail_silently = False
+            # )
+            mail_status = EmailMessage(
+                            mail_subject,
+                            html_message,
+                            from_email,
+                            [to_email])
+            mail_status.content_subtype = 'html'  # Set the content type as HTML
+            mail_status.send()
+        return 'Mail sent successfully'    
+    except Exception as e:
+        raise APIException(e) 
+        
+def change_user_password(**data):
+    try:
+        userId = data.get('userId')
+        password = data.get('password')
+        user_exist = User.objects.filter(id = userId).first()
+        if user_exist :
+            user_exist.set_password(password)
+            user_exist.save()
+        return 'Password changed successfully'    
+    except Exception as e:
+        raise APIException(e)
